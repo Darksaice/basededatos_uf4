@@ -4,9 +4,27 @@
 </head>
 <body>
 <form>
-<p><input type="text" name="msg" /><button>Enviar</button></p>
+<p><input type="text" name="user" id="user" placeholder="Usuario"/>
+<input type="text" name="msg" id=msg" placeholder="Mensaje"/><button>Enviar</button></p>
 </form>
 <div id="chat">
 </div>
+
+<script>
+const refresh_time = 2000;
+
+setInterval(() => {
+	fetch("/chats")
+		.then ( (response) => response.json() )
+		.then (	data => {
+				let lista = '';
+				for (let i =0; i < data.length; i++){
+					lista +="<li>"+data[i].user+": "+data[i].msg+"</li>";
+				}
+				document.getElementById("chat").innerHTML = "<ul>"+lista+"</ul>";
+		});
+	
+}, refresh_time);
+</script>
 </body>
 </html>

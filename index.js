@@ -22,11 +22,11 @@ mongo.connect(server_url, (err, server) => {
 	
 function sendChats (response)
 {	
-	let cursor = chats_db.collection("chats").find({});
+	let cursorP = chats_db.collection("chats").find({});
 	
 	let data = [];
 
-	cursor.each( (err, doc) => {
+	cursorP.each( (err, doc) => {
 			if (err) {
 				console.log("Error al leer el documento");
 				throw err;
@@ -55,7 +55,15 @@ http.createServer( (request, response) => {
 	
 	if (request.url == "/chats"){
 		console.log("Nos piden el chat de mongo");
-		response.writeHead(200, {'Content-Type':'text/plain'});
+		let cursor = chats_db.collection("chats").find({});
+		let chat = cursor.toArray();
+		chat.then( (data) => {
+			console.log(data);
+			response.writeHead(200, {'Content-Type':'text/plain'});
+			response.write( JSON.stringify(data) );
+			response.end();
+		});
+		
 	//	response.write("<p>Ahora viene el chat</p>");
 	//	response.end();
 
