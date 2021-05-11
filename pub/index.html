@@ -9,9 +9,25 @@
 <input type="text" name="msg" id="msg" placeholder="Mensaje"/><button>Enviar</button></p>
 </form>
 <div id="chat">
+<ul id="chat-msgs">
+</ul>
 </div>
 
 <script>
+let last_date = 0;
+
+	function print_chat(data){
+				let lista = '';
+				for (let i =0; i < data.length; i++){
+					lista +="<li>"+data[i].user+": "+data[i].msg+"</li>";
+				}
+				document.getElementById("chat-msgs").innerHTML += lista;
+	}
+
+	function set_last (data) {
+			last_date = data[data.length-1].date;
+	}
+
 const refresh_time = 2000;
 
 document.getElementById("chat-form").addEventListener('submit', e => {
@@ -33,18 +49,25 @@ document.getElementById("chat-form").addEventListener('submit', e => {
 	});
 });
 
+fetch("/recent")
+	.then( response => response.json() )
+	.then( data => {
+				print_chat(data);
+				set_last(data);
+	});
+
 setInterval(() => {
-	fetch("/chats")
-		.then ( (response) => response.json() )
+	fetch("/chats?last="+last_date)
+		.then ( response => response.json() )
 		.then (	data => {
-				let lista = '';
-				for (let i =0; i < data.length; i++){
-					lista +="<li>"+data[i].user+": "+data[i].msg+"</li>";
-				}
-				document.getElementById("chat").innerHTML = "<ul>"+lista+"</ul>";
+				if (data.length == 0)
+					return;
+				print_chat(data);
+				set_last(data);
 		});
 	
 }, refresh_time);
+
 </script>
 </body>
 </html>

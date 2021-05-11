@@ -20,30 +20,6 @@ mongo.connect(server_url, (err, server) => {
 	chats_db = server.db("amongmeme");
 });
 	
-/*function sendChats (response)
-{	
-	let cursorP = chats_db.collection("chats").find({});
-	
-	let data = [];
-
-	cursorP.each( (err, doc) => {
-			if (err) {
-				console.log("Error al leer el documento");
-				throw err;
-			}
-			data.push(doc);
-		//	console.log(data);
-		
-		// if (ultimo caso){
-		//  response.write("<p>Ahora viene el chat</p>");
-		//  response.end();
-		//	}
-
-	});
-	console.log(data);
-};*/
-
-
 console.log("Inicializando servidor chat");
 
 
@@ -53,9 +29,15 @@ http.createServer( (request, response) => {
 
 	console.log("Archivo: "+request.url);
 	
-	if (request.url == "/chats"){
+	if (request.url.startsWith("/chats")){
 		console.log("Nos piden el chat de mongo");
-		let cursor = chats_db.collection("chats").find({});
+		let info = request.url.split("=");
+		console.log(info[1]);
+		let query = {
+			date : { $gt : parseInt(info[1]) }
+		};
+
+		let cursor = chats_db.collection("chats").find(query);
 		let chat = cursor.toArray();
 		chat.then( (data) => {
 		//	console.log(data);
@@ -107,4 +89,3 @@ http.createServer( (request, response) => {
 	}
 	public_files.serve(request, response);
 }).listen(8080);
-
