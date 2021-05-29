@@ -53,12 +53,13 @@ http.createServer( (request, response) => {
 	if (request.url == "/recent"){
 		//yo tengo un total de 7 chats insertados en mongo
 		const NUM = 7;
-		const MAX = 5;
+		const MAX = 5;	
 		let cursor = chats_db.collection("chats").find({},{
 				skip:NUM - MAX,
 				limit:MAX,
 				sort:{$natural:1}
 			});
+		
 		let chat = cursor.toArray();
 		chat.then( (data) => {
 			response.writeHead(200, {'Content-Type':'text/plain'});
@@ -67,11 +68,28 @@ http.createServer( (request, response) => {
 		});
 		return;
 	}
+	
+/*	if (request.url == "/history"){
+		const NUM = 7;
+		const MAX = 7;
+		let cursor = chats_db.collection("chats").find({},{
+				limit:MAX;
+				sort:{$natural:1}
+		});
+		let chat = cursor.toArray();
+		chat.then( (data) => {
+			response.writeHead(200, {'Content-Type':'text/plain'});
+			response.write( JSON.stringify(data) );
+			response.end();
+		
+		});
+		return;
+	}*/
 
 	if (request.url == "/submit") {
-		console.log("Envío de datos: ", request.body);
+		console.log("Envío de datos");
 		let body = [];
-		request.on('data', chunk => {
+		request.on('data', (chunk) => {
 			body.push(chunk);
 		}).on('end', () => {
 			let chat_data = JSON.parse(Buffer.concat(body).toString());
