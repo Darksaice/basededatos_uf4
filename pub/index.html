@@ -71,7 +71,6 @@ fetch("/history")
 		.then( response => response.json() )
 		.then( data => {
 				print_chat(data);
-				set_last(data);
 				formattedDate;
 	});
 
