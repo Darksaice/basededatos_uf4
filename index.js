@@ -57,7 +57,7 @@ http.createServer( (request, response) => {
 		let cursor = chats_db.collection("chats").find({},{
 				skip:NUM - MAX,
 				limit:MAX,
-				sort:{$natural:1}
+				sort:{$natural:1},
 			});
 		
 		let chat = cursor.toArray();
@@ -66,25 +66,26 @@ http.createServer( (request, response) => {
 			response.write( JSON.stringify(data) );
 			response.end();
 		});
-		return;
+		return();
 	}
-	
-/*	if (request.url == "/history"){
+
+	if (request.url == "/history"){
 		const NUM = 7;
 		const MAX = 7;
 		let cursor = chats_db.collection("chats").find({},{
-				limit:MAX;
-				sort:{$natural:1}
+				limit:MAX,
+				sort:{$natural:1},
 		});
 		let chat = cursor.toArray();
 		chat.then( (data) => {
 			response.writeHead(200, {'Content-Type':'text/plain'});
 			response.write( JSON.stringify(data) );
+			response.write( JSON.stringify({'date' : new Date()});
 			response.end();
 		
 		});
 		return;
-	}*/
+	}
 
 	if (request.url == "/submit") {
 		console.log("Envío de datos");
