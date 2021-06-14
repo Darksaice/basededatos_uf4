@@ -60,18 +60,10 @@ fetch("/recent")
 	});
 
 fetch("/history")
-		method = Date.toJSON();
-		let d = new Date();
-		let formattedDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
-		let hours = (d.getHours() < 10) ? "0" + d.getHours() : d.getHours();
-		let minutes = (d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes();
-		let formattedTime = hours + ":" + minutes;
-
-		formattedDate = formattedDate + " " + formattedTime;
 		.then( response => response.json() )
 		.then( data => {
 				print_chat(data);
-				formattedDate;
+				
 	});
 
 setInterval(() => {

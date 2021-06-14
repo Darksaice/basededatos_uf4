@@ -66,7 +66,7 @@ http.createServer( (request, response) => {
 			response.write( JSON.stringify(data) );
 			response.end();
 		});
-		return();
+		return;
 	}
 
 	if (request.url == "/history"){
@@ -80,7 +80,7 @@ http.createServer( (request, response) => {
 		chat.then( (data) => {
 			response.writeHead(200, {'Content-Type':'text/plain'});
 			response.write( JSON.stringify(data) );
-			response.write( JSON.stringify({'date' : new Date()});
+		//	response.write( JSON.stringify({'date' : new Date()});
 			response.end();
 		
 		});
