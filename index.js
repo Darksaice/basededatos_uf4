@@ -76,11 +76,23 @@ http.createServer( (request, response) => {
 				limit:MAX,
 				sort:{$natural:1},
 		});
+		let alldate = "";
 		let chat = cursor.toArray();
 		chat.then( (data) => {
-			response.writeHead(200, {'Content-Type':'text/plain'});
-			response.write( JSON.stringify(data) );
-		//	response.write( JSON.stringify({'date' : new Date()});
+
+			for (let i = 0; i < data.length; i++){
+						let date = data[i].date;
+						let currentDate = new Date (parseInt(date));
+						let month = currentDate.getMonth () +1;
+						let day = currentDate.getDate();
+						let year = currentDate.getFullYear();
+
+						let fecha = day + " / " + month + " / " + year;
+						alldate = " ( " + fecha + " ) " + data[i].user + " : " + data[i].msg;
+						
+						response.writeHead(200, {'Content-Type':'text/plain'});
+						response.write( JSON.stringify(alldate) + "\n" );
+			}
 			response.end();
 		
 		});
